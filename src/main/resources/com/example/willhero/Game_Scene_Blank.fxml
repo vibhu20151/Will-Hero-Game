@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" style="-fx-background-color: #00BFFF;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.willhero.Regenerate_Game">
+    <children>
+        <Group fx:id="pausegroup" layoutX="531.0" layoutY="717.0" style="visibility: #bdd631;" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff255f" height="46.0" layoutX="1084.0" layoutY="3.0" stroke="#5e63ff" strokeType="INSIDE" width="86.0" />
+        <ImageView fitHeight="34.0" fitWidth="25.0" layoutX="627.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <!--                <Image url="@../../../../../../../iiit delhi/src/main/resources/Assests/coin.png" />-->
+            </image>
+        </ImageView>
+        <Button fx:id="pause" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#pause_game" prefHeight="40.0" prefWidth="55.0" text="Pause" />
+        <ImageView fx:id="coinicon" fitHeight="27.0" fitWidth="31.0" layoutX="1090.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../Assests/coin.png" />
+            </image>
+        </ImageView>
+    </children>
+</AnchorPane>

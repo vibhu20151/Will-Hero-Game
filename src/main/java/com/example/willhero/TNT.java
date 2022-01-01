@@ -12,7 +12,6 @@ import java.io.File;
 
 public class TNT extends Game_Objects implements Collision {
 
-
     public TNT(int x, int y) {
         super(x, y);
         image = new Image(new File("src\\main\\resources\\Assests\\TNT.png").toURI().toString());

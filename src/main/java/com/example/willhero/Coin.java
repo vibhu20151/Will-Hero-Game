@@ -10,10 +10,11 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class Coin extends Game_Objects implements Collision{
-    int opacity;
-    RotateTransition rotate=new RotateTransition();
+public class Coin extends Game_Objects implements Collision {
+    private int opacity;
+    private transient RotateTransition rotate=new RotateTransition();
 
     public Coin(int x, int y) {
         super(x, y);

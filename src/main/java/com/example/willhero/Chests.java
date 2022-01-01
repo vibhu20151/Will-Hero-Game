@@ -8,13 +8,15 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Chests implements Collision{
+public class Chests implements Collision, Serializable {
     private int x;
     private int y;
-    private Image[] image=new Image[3];
-    private Random random=new Random();
+    private transient Image[] image=new Image[3];
+    Random random=new Random();
 
     private int number;
 
@@ -38,11 +40,18 @@ public class Chests implements Collision{
         this.y = y;
     }
 
+    private void setnumber()
+    {
+        number=getNumber();
+    }
+
     public Chests(int x,int y)
     {
         this.x=x;
         this.y=y;
         number=random.nextInt(2);
+
+        setnumber();
 
         image[0]=(new Image(new File("src\\main\\resources\\Assests\\Treasure.png").toURI().toString()));
 
@@ -79,7 +88,6 @@ public class Chests implements Collision{
         timeline2.setCycleCount(50);
         timeline2.play();
         setX(getX()-50);
-
     }
     public void move_screen_back()
     {
@@ -97,7 +105,6 @@ public class Chests implements Collision{
         move_back();
         move_screen_back();
     }
-
     public boolean collided;
 
 }

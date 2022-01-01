@@ -7,14 +7,15 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Green_Orchs extends Game_Objects implements Collision {
-    Random random = new Random();
+public class Green_Orchs extends Game_Objects  implements Collision {
+    private transient Random random = new Random();
 
-    private Timeline t1;
-    private Timeline t2;
-    private SequentialTransition s;
+    private transient Timeline t1;
+    private transient Timeline t2;
+    private transient SequentialTransition s;
 
 
     public Green_Orchs(int x, int y) {

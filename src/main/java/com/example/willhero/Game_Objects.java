@@ -12,8 +12,8 @@ public abstract class Game_Objects implements Serializable {
 
     private int x;
     private int y;
-    protected ImageView imageView;
-    protected Image image;
+    protected transient ImageView imageView;
+    protected transient Image image;
 
     public ImageView getImageView() {
         return imageView;

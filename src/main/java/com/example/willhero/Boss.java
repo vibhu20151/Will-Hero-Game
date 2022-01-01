@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Boss implements Collision{
     private int no_of_collision;
-    private Image image;
+    private transient Image image;
     private int x,y;
 
     public int getX() {

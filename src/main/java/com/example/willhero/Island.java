@@ -8,16 +8,16 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Island {
+public class Island implements Serializable {
+
     private int x;
     private int y;
     public int getX() {
         return x;
     }
-
-
     public void setX(int x) {
         this.x = x;
     }
@@ -30,8 +30,8 @@ public class Island {
         this.y = y;
     }
 
-    private Image[] image=new Image[5];
-    Random random=new Random();
+    private transient Image[] image=new Image[5];
+    private Random random=new Random();
     private int number;
 
     public int getNumber() {

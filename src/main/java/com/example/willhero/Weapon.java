@@ -14,7 +14,7 @@ import java.util.Random;
 public class Weapon {
 
     Random random;
-    private Image[] image=new Image[2];
+    private transient Image[] image=new Image[2];
     private int weapon_type;
     public Weapon(int x,int y)
     {

@@ -2,12 +2,15 @@ package com.example.willhero;
 
 import javafx.animation.*;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -17,9 +20,12 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameOpen extends Application implements Initializable {
+
+    private GameController a;
 
     public static Stage mystage;
 
@@ -66,18 +72,20 @@ public class GameOpen extends Application implements Initializable {
     private ImageView sword2;
 
     @FXML
-    void exitgame(ActionEvent event) {
-
-    }
+    private AnchorPane Loadgamepane;
 
     @FXML
+    void exitgame(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
+    @FXML
     void jump(MouseEvent event) {
-
     }
 
     @FXML
     void load_game(ActionEvent event) {
-
+        Loadgamepane.setVisible(true);
     }
 
     @FXML
@@ -95,6 +103,8 @@ public class GameOpen extends Application implements Initializable {
     @Override
     public void start(Stage stage) throws IOException {
         mystage=stage;
+
+
         FXMLLoader fxmlLoader = new FXMLLoader(GameOpen.class.getResource("MainMenu.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
@@ -108,6 +118,11 @@ public class GameOpen extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        savedGameList=fileloading.getGameload();
+        Loadgamepane.setVisible(false);
+        choice.setItems(FXCollections.observableList(savedGameList));
+
         ScaleTransition st = new ScaleTransition(Duration.millis(2000), hero);
         st.setByX(0.3f);
         st.setByY(0.3f);
@@ -157,4 +172,33 @@ public class GameOpen extends Application implements Initializable {
         translate2Transition.play();
 
     }
+    @FXML
+    private Button exitloadmenu;
+    @FXML
+    private Button loadgame;
+
+    @FXML
+    void exitloadmenu(ActionEvent event) {
+        Loadgamepane.setVisible(false);
+    }
+    @FXML
+    void loadgamenow(ActionEvent event) throws IOException, ClassNotFoundException {
+        a=new GameController();
+        String tmp=choice.getValue();
+        if(tmp==null){
+            System.out.println("Please select some game..");}
+        else
+        {
+
+            System.out.println(tmp);
+            String finalloader_file="C:\\Users\\S K R\\Desktop\\iiit delhi\\Advanced Pragramming\\src\\main\\GamesSaved\\";
+            finalloader_file=finalloader_file.concat(tmp);
+            a.loadthegame(finalloader_file);
+        }
+    }
+    private GameLoading fileloading=new GameLoading();
+    private ArrayList<String> savedGameList;
+
+    @FXML
+    private ChoiceBox<String> choice;
 }

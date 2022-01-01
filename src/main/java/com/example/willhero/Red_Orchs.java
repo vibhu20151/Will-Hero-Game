@@ -4,9 +4,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Red_Orchs extends Green_Orchs{
+public class Red_Orchs extends Green_Orchs {
 
     public Red_Orchs(int x, int y) {
         super(x, y);

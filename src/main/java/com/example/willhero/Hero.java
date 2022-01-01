@@ -1,24 +1,40 @@
 package com.example.willhero;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 
-public class Hero extends Game_Objects{
-    private Image image;
-    private Timeline t1;
-    private Timeline t2;
-    private TranslateTransition translateTransition;
+public class Hero extends Game_Objects implements Serializable{
+    private int death;
+
+    public int getDeath() {
+        return death;
+    }
+
+    public void setDeath(int death) {
+        this.death = death;
+    }
+
+    private boolean islife;
+
+
+    private transient Timeline t1;
+    private transient Timeline t2;
+    private transient TranslateTransition translateTransition;
     public Hero(int x, int y) {
         super(x, y);
+        death=0;
         image=new Image(new File("src\\main\\resources\\Assests\\real_hero.png").toURI().toString());
-
+        islife=true;
         imageView=new ImageView(image);
         imageView.setX(x);
         imageView.setY(y);
@@ -67,12 +83,22 @@ public class Hero extends Game_Objects{
     {
         translateTransition.stop();
     }
-    public void death()
+    public void death(AnchorPane pane)
     {
-        translateTransition.setToY(200);
-        translateTransition.setDuration(Duration.millis(100));
+        RotateTransition rotate = new RotateTransition();
+        rotate.setAxis(Rotate.Z_AXIS);
+        rotate.setByAngle(360);
+        rotate.setCycleCount(500);
+        rotate.setDuration(Duration.millis(300));
+        rotate.setAutoReverse(false);
+        rotate.setNode(imageView);
+        rotate.play();
+        translateTransition.setToY(400);
+        translateTransition.setDuration(Duration.millis(200));
         translateTransition.setNode(imageView);
         translateTransition.setCycleCount(1);
         translateTransition.play();
+        pane.setOnMouseClicked(null);
+
     }
 }

@@ -33,6 +33,7 @@ public class Regenerate_Game implements Initializable {
     ScheduledExecutorService executorService22 = Executors.newScheduledThreadPool(1);
 
     private Player player = new Player();
+    private ArrayList<Extra_Backgroud1> extra_backgroud1s;
 
     public void setPlayer(Player player) {
         this.player = player;
@@ -49,7 +50,7 @@ public class Regenerate_Game implements Initializable {
     ArrayList<Island>islands;
     ArrayList<Chests>chests;
     private Boss boss;
-    private Random random;
+    private Random random=new Random();
     private AnchorPane panel ;
 
     private AnchorPane saveit ;
@@ -134,6 +135,8 @@ public class Regenerate_Game implements Initializable {
         score=new Label(Integer.toString(player.getCurrentscore()));
         coin=new Label(Integer.toString(player.getCurrentcoins()));
         setPlayer(GameController.playerlaoding);
+        extra_backgroud1s = new ArrayList<>();
+        add_backgroud();
 
         boss=new Boss(550, -240);
 
@@ -186,6 +189,10 @@ public class Regenerate_Game implements Initializable {
                 for(int i =0;i<chests.size();i++)
                 {
                     chests.get(i).window_sliding();
+                }
+                for (int i = 0; i < extra_backgroud1s.size(); i++) {
+                    extra_backgroud1s.get(i).move_back();
+                    extra_backgroud1s.get(i).move_screen_back();
                 }
                 if(player.getCurrentscore()==100)
                 {
@@ -606,6 +613,19 @@ public class Regenerate_Game implements Initializable {
                     boss.death();
                 }
             }
+        }
+    }
+    private void add_backgroud() {
+        Extra_Backgroud1 initial = new Extra_Backgroud1(random.nextInt(10), 100);
+        extra_backgroud1s.add(initial);
+        for (int i = 0; i <= 60; i++) {
+            Extra_Backgroud1 hello = new Extra_Backgroud1(extra_backgroud1s.get(i).getX() + random.nextInt(100) + 200, random.nextInt(70) +100 );
+            extra_backgroud1s.add(hello);
+        }
+        int i = 0;
+
+        for (; i < extra_backgroud1s.size(); i++) {
+            pane.getChildren().add(extra_backgroud1s.get(i).imageView);
         }
     }
 }

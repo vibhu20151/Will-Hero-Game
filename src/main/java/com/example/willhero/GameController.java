@@ -31,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 public class GameController implements Initializable {
 
+    private ArrayList<Extra_Backgroud1> extra_backgroud1s;
+
     Player player=new Player();
 
     public void setPlayer(Player player) {
@@ -160,9 +162,13 @@ public class GameController implements Initializable {
         gameObjects=new ArrayList<>();
         score.setText(Integer.toString(player.getCurrentscore()));
         coin.setText(Integer.toString(player.getCurrentcoins()));
+        extra_backgroud1s = new ArrayList<>();
+
+        add_backgroud();
 
         add_islands();
         add_game_objects();
+
         pauseitnow=new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -200,6 +206,10 @@ public class GameController implements Initializable {
                 for(int i =0;i<chests.size();i++)
                 {
                     chests.get(i).window_sliding();
+                }
+                for (int i = 0; i < extra_backgroud1s.size(); i++) {
+                    extra_backgroud1s.get(i).move_back();
+                    extra_backgroud1s.get(i).move_screen_back();
                 }
                 if(player.getCurrentscore()==100)
                 {
@@ -708,6 +718,18 @@ public class GameController implements Initializable {
 
     }
 
+    private void add_backgroud() {
+        Extra_Backgroud1 initial = new Extra_Backgroud1(random.nextInt(10), 100);
+        extra_backgroud1s.add(initial);
+        for (int i = 0; i <= 60; i++) {
+            Extra_Backgroud1 hello = new Extra_Backgroud1(extra_backgroud1s.get(i).getX() + random.nextInt(100) + 200, random.nextInt(70) +100 );
+            extra_backgroud1s.add(hello);
+        }
+        int i = 0;
 
+        for (; i < extra_backgroud1s.size(); i++) {
+            pane.getChildren().add(extra_backgroud1s.get(i).imageView);
+        }
+    }
 }
 

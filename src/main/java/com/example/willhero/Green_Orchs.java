@@ -96,7 +96,7 @@ public class Green_Orchs extends Game_Objects  implements Collision {
         });
         Timeline k2 = new Timeline(movedown);
         k2.setDelay(Duration.millis(100));
-        k2.setCycleCount(300);
+        k2.setCycleCount(500);
         k2.play();
 
         RotateTransition rotate = new RotateTransition();

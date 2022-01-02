@@ -109,15 +109,26 @@ public class Weapon extends Game_Objects implements Serializable{
         if(i==0){
             setnumber(2);
         }
-        else {
+        else if (i>5){
 
             setnumber(random.nextInt(2));
+        }
+        else{
+            setnumber(i);
         }
         KeyFrame keyFrame2On = new KeyFrame(Duration.millis(0.1), new KeyValue(imageView.imageProperty(), image1[number]));
         Timeline k = new Timeline(keyFrame2On);
         k.setCycleCount(1);
         k.play();
     }
+//    public void weaponget(int a)
+//    {
+//        setnumber(a);
+//        KeyFrame keyFrame2On = new KeyFrame(Duration.millis(0.1), new KeyValue(imageView.imageProperty(), image1[number]));
+//        Timeline k = new Timeline(keyFrame2On);
+//        k.setCycleCount(1);
+//        k.play();
+//    }
 
     public void kill() {
         RotateTransition rotate = new RotateTransition();

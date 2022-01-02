@@ -143,7 +143,7 @@ public class Regenerate_Game implements Initializable {
 
         boss=new Boss(550, -240);
 
-        weapon=new Weapon(player.getWeapon().getX(),player.getWeapon().getY());
+        weapon=new Weapon(player.getWeapon().getX(),400);
         weapon.gotweapon(player.getWeapon().getNumber());
 
         chests=new ArrayList<>();

@@ -593,7 +593,7 @@ public class GameController implements Initializable {
                     coin.setText(Integer.toString(player.getCurrentcoins()));
                 }
                 else{
-                    weapon.gotweapon(1);
+                    weapon.gotweapon(10);
                 }
             }
         }

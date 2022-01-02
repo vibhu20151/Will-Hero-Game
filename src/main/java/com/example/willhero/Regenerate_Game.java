@@ -187,20 +187,38 @@ public class Regenerate_Game implements Initializable {
                 {
                     chests.get(i).window_sliding();
                 }
-                if(player.getCurrentscore()==104)
+                if(player.getCurrentscore()==100)
                 {
                     collision_objects.stop();
                     executorService.shutdownNow();
                 }
-                if(player.getCurrentscore()==101)
+                if(player.getCurrentscore()==105)
                 {
                     add_boss();
                     boss.translation_of_boss();
                     boss_collision.start();
                 }
-                if(player.getCurrentscore()>101)
+                if(player.getCurrentscore()>105)
                 {
                     boss.objects_move_Back();
+                }
+                if(player.getCurrentscore()==122)
+                {
+                    FXMLLoader  loader = new FXMLLoader(getClass().getResource("Game_Won.fxml"));
+                    try {
+                        panel=(AnchorPane) loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    panel.setLayoutX(60);
+                    panel.setLayoutY(200);
+                    pane.getChildren().add(panel);
+                    panel.getChildren().get(2).setOnMouseClicked(playagain);
+                    panel.getChildren().get(3).setOnMouseClicked(exitgame);
+                    pane.setOnMouseClicked(null);
+                    pause.setOnMouseClicked(null);
+                    death.stop();
+                    executorService.shutdownNow();
                 }
             }
         };
@@ -242,6 +260,9 @@ public class Regenerate_Game implements Initializable {
                 {
                     if(player.getCurrentcoins() >= 3)
                     {
+                        death.stop();
+                        collision_objects.stop();
+
                         pane.getChildren().remove(gameoverpane);
                         player.setCurrentcoins(player.getCurrentcoins()-3);
                         coin.setText(Integer.toString(player.getCurrentcoins()));
@@ -250,27 +271,24 @@ public class Regenerate_Game implements Initializable {
 
                         pane.getChildren().remove(hero);
 
+                        death.stop();
+                        pane.setOnMouseClicked(screenclicked);
                         hero=new Hero(50,400);
                         hero.move_up_hero();
-
-
+                        hero.set_exact_y();
                         pane.getChildren().add(hero.imageView);
-                        for(int i=0;i< islands.size();i++)
-                        {
-                            islands.get(i).window_sliding();
-                        }
-                        for(int i=0;i< chests.size();i++)
-                        {
-                            chests.get(i).window_sliding();
-                        }
-                        for (int i=0;i< gameObjects.size();i++)
-                        {
-                            gameObjects.get(i).objects_move_Back();
-                        }
-                        pane.setOnMouseClicked(screenclicked);
+                        pane.getChildren().add(hero.imageView);
                         ScheduledExecutorService executorService1 = Executors.newScheduledThreadPool(1);
                         executorService1.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
-                        death.start();
+                        Timeline t=new Timeline(new KeyFrame(Duration.millis(1),e->
+                        {
+                            executorService1.scheduleAtFixedRate(hasfallen, 2, 2, TimeUnit.SECONDS);
+                            collision_objects.start();
+                            death.start();
+                        }));
+                        t.setCycleCount(1);
+                        t.setDelay(Duration.seconds(4));
+                        t.play();
                     }
                     else
                     {
@@ -321,23 +339,10 @@ public class Regenerate_Game implements Initializable {
         saveGame=new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                player.name_increase();
-
-                String filename = filename("C:\\Users\\S K R\\Desktop\\iiit delhi\\Advanced Pragramming\\src\\main\\GamesSaved");
-                try {
-                    SerializePlayer(filename);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                FXMLLoader fxmlLoader = new FXMLLoader(GameOpen.class.getResource("MainMenu.fxml"));
-                Scene scene1 = null;
-                try {
-                    scene1 = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                GameOpen.mystage.setScene(scene1);
-                GameOpen.mystage.show();
+                Label l =new Label("Sorry,we supports only 1 Save for each Game!!..");
+                panel.getChildren().add(l);
+                l.setLayoutY(475);
+                l.setLayoutX(175);
             }
         };
 

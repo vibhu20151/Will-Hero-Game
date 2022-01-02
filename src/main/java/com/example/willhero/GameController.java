@@ -63,6 +63,7 @@ public class GameController implements Initializable {
     private AnchorPane panel ;
     private AnchorPane gameoverpane;
 
+    private AnchorPane gamewonpane;
 
     private AnchorPane saveit ;
 
@@ -200,20 +201,38 @@ public class GameController implements Initializable {
                 {
                     chests.get(i).window_sliding();
                 }
-                if(player.getCurrentscore()==104)
+                if(player.getCurrentscore()==100)
                 {
                     collision_objects.stop();
                     executorService.shutdownNow();
                 }
-                if(player.getCurrentscore()==101)
+                if(player.getCurrentscore()==105)
                 {
                     add_boss();
                     boss.translation_of_boss();
                     boss_collision.start();
                 }
-                if(player.getCurrentscore()>101)
+                if(player.getCurrentscore()>105)
                 {
                     boss.objects_move_Back();
+                }
+                if(player.getCurrentscore()==122)
+                {
+                    FXMLLoader  loader = new FXMLLoader(getClass().getResource("Game_Won.fxml"));
+                    try {
+                        panel=(AnchorPane) loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    panel.setLayoutX(60);
+                    panel.setLayoutY(200);
+                    pane.getChildren().add(panel);
+                    panel.getChildren().get(2).setOnMouseClicked(playagain);
+                    panel.getChildren().get(3).setOnMouseClicked(exitgame);
+                    pane.setOnMouseClicked(null);
+                    pause.setOnMouseClicked(null);
+                    death.stop();
+                    executorService.shutdownNow();
                 }
             }
         };
@@ -255,42 +274,45 @@ public class GameController implements Initializable {
                 {
                     if(player.getCurrentcoins() >= 3)
                     {
+                        death.stop();
+                        collision_objects.stop();
+
                         pane.getChildren().remove(gameoverpane);
-                        player.setCurrentcoins(player.getCurrentcoins()-3);
+                        player.setcoin(player.getCurrentcoins()-3);
                         coin.setText(Integer.toString(player.getCurrentcoins()));
                         pause.setOnMouseClicked(pauseitnow);
                         player.setGames_played(1);
 
                         pane.getChildren().remove(hero);
 
+                        death.stop();
+
+                        pane.setOnMouseClicked(screenclicked);
+
                         hero=new Hero(50,400);
                         hero.move_up_hero();
-
+                        hero.set_exact_y();
 
                         pane.getChildren().add(hero.imageView);
-                        for(int i=0;i< islands.size();i++)
-                        {
-                            islands.get(i).window_sliding();
-                        }
-                        for(int i=0;i< chests.size();i++)
-                        {
-                            chests.get(i).window_sliding();
-                        }
-                        for (int i=0;i< gameObjects.size();i++)
-                        {
-                            gameObjects.get(i).objects_move_Back();
-                        }
-                        pane.setOnMouseClicked(screenclicked);
+
                         ScheduledExecutorService executorService1 = Executors.newScheduledThreadPool(1);
-                        executorService1.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
-                        death.start();
+
+                        Timeline t=new Timeline(new KeyFrame(Duration.millis(1),e->
+                        {
+                            executorService1.scheduleAtFixedRate(hasfallen, 2, 2, TimeUnit.SECONDS);
+                            death.start();
+                            collision_objects.start();
+                        }));
+                        t.setCycleCount(1);
+                        t.setDelay(Duration.seconds(6));
+                        t.play();
                     }
                     else
                     {
                         Label message=new Label("Sorry You are not eligible to Revive..!");
                         gameoverpane.getChildren().add(message);
                         message.setFont(font);
-                        message.setLayoutX(25);
+                        message.setLayoutX(45);
                         message.setLayoutY(335);
                     }
                 }
@@ -395,7 +417,7 @@ public class GameController implements Initializable {
             islands.add(island);
             pane.getChildren().add(islands.get(i).imageView);
         }
-        for(int i=0;i<20;i++)
+        for(int i=0;i<30;i++)
         {
             if(i==0) {
                 Island island1 = new Island(islands.get(29).getX()+250+random.nextInt(25),470,1);

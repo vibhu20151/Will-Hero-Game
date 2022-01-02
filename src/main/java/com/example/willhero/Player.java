@@ -3,6 +3,7 @@ package com.example.willhero;
 import javax.crypto.SecretKey;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player implements Serializable {
     private int currentscore;
@@ -11,6 +12,7 @@ public class Player implements Serializable {
     private ArrayList<Game_Objects>gameObjects;
     private Hero hero;
     private ArrayList<Chests>chests;
+    private static Random random=new Random();
 
     public ArrayList<Game_Objects> getGameObjects() {
         return gameObjects;
@@ -66,7 +68,8 @@ public class Player implements Serializable {
         return currentcoins;
     }
 
-    private static int name=0;
+    private static int name=random.nextInt(10);
+
 
     public static int getName() {
         return name;
@@ -94,5 +97,9 @@ public class Player implements Serializable {
         {
             this.chests.add(chests.get(k));
         }
+    }
+    public void setcoin(int a)
+    {
+        this.currentcoins=a;
     }
 }

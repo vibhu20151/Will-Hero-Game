@@ -11,6 +11,12 @@ public class Player implements Serializable {
     private int games_played;
     private ArrayList<Game_Objects>gameObjects;
     private Hero hero;
+    private Weapon weapon;
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
     private ArrayList<Chests>chests;
     private static Random random=new Random();
 
@@ -80,7 +86,7 @@ public class Player implements Serializable {
         name++;
     }
 
-    public void add_objects_to_player(ArrayList<Game_Objects>gameObjects,Hero hero,ArrayList<Island>islands,ArrayList<Chests>chests)
+    public void add_objects_to_player(ArrayList<Game_Objects>gameObjects,Hero hero,ArrayList<Island>islands,ArrayList<Chests>chests,Weapon weapon)
     {
         for(int i =0;i<gameObjects.size();i++)
         {
@@ -97,6 +103,7 @@ public class Player implements Serializable {
         {
             this.chests.add(chests.get(k));
         }
+        this.weapon=weapon;
     }
     public void setcoin(int a)
     {

@@ -98,6 +98,7 @@ public class GameController implements Initializable {
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     private Hero hero = new Hero(50, 400);
+    private Weapon weapon=new Weapon(75,400);
 
     private AnimationTimer collision_objects=new AnimationTimer() {
         @Override
@@ -111,6 +112,8 @@ public class GameController implements Initializable {
         public void handle(long timestamp) {
             if(hero.getDeath()==1)
             {
+                pane.getChildren().remove(weapon.imageView);
+                weapon.gotweapon(0);
                 hero.death(pane);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Game_Over.fxml"));
                 try {
@@ -195,6 +198,7 @@ public class GameController implements Initializable {
                 score.setText(Integer.toString(player.getCurrentscore()));
                 coin.setText(Integer.toString(player.getCurrentcoins()));
                 hero.window_sliding_forward();
+                weapon.window_sliding_forward();
                 for(int i=0;i<gameObjects.size();i++)
                 {
                     gameObjects.get(i).objects_move_Back();
@@ -287,6 +291,7 @@ public class GameController implements Initializable {
                         death.stop();
                         collision_objects.stop();
 
+                        pane.getChildren().add(weapon.imageView);
                         pane.getChildren().remove(gameoverpane);
                         player.setcoin(player.getCurrentcoins()-3);
                         coin.setText(Integer.toString(player.getCurrentcoins()));
@@ -402,7 +407,7 @@ public class GameController implements Initializable {
     public void SerializePlayer(String fileName) throws IOException {
         ObjectOutputStream out = null;
         try {
-            player.add_objects_to_player(gameObjects,hero,islands,chests);
+            player.add_objects_to_player(gameObjects,hero,islands,chests,weapon);
             out = new ObjectOutputStream(new FileOutputStream(fileName));
             out.writeObject(player);
 
@@ -417,6 +422,9 @@ public class GameController implements Initializable {
         hero.move_up_hero();
         hero.set_exact_y();
         executorService.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
+        pane.getChildren().add(weapon.imageView);
+        weapon.move_up_hero();
+        weapon.set_exact_y();
     }
     public void add_islands()
     {
@@ -584,6 +592,9 @@ public class GameController implements Initializable {
                     player.setCurrentcoins(10);
                     coin.setText(Integer.toString(player.getCurrentcoins()));
                 }
+                else{
+                    weapon.gotweapon(1);
+                }
             }
         }
     }
@@ -626,7 +637,11 @@ public class GameController implements Initializable {
             {
                 if(hero.imageView.getBoundsInParent().intersects(gameObjects.get(i).getImageView().getBoundsInParent()) &&  gameObjects.get(i).collided== false) {
 
-                    if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
+                    if(weapon.getNumber()!=2){
+                        weapon.kill();
+                        ((Green_Orchs) gameObjects.get(i)).collision();
+                    }
+                    else if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
                         hero.setDeath(1);
                     } else {
@@ -638,8 +653,11 @@ public class GameController implements Initializable {
             else if(gameObjects.get(i) instanceof Red_Orchs)
             {
                 if(hero.imageView.getBoundsInParent().intersects(gameObjects.get(i).getImageView().getBoundsInParent()) &&  gameObjects.get(i).collided== false) {
-
-                    if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
+                    if(weapon.getNumber()!=3){
+                        weapon.kill();
+                        ((Red_Orchs) gameObjects.get(i)).collision();
+                    }
+                    else if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
                         hero.setDeath(1);
                     } else {
@@ -671,7 +689,7 @@ public class GameController implements Initializable {
                 System.out.println(boss.imageView.getY());
                 System.out.println(hero.getY()-20);
                 hero.stop_up_transitions();
-//                hero.death();
+                hero.setDeath(1);
             }
             else
             {

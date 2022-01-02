@@ -80,6 +80,7 @@ public class Regenerate_Game implements Initializable {
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     Hero hero;
+    private Weapon weapon;
 
     private AnimationTimer collision_objects=new AnimationTimer() {
         @Override
@@ -93,6 +94,8 @@ public class Regenerate_Game implements Initializable {
         public void handle(long timestamp) {
             if(hero.getDeath()==1)
             {
+                pane.getChildren().remove(weapon.imageView);
+                weapon.gotweapon(0);
                 hero.death(pane);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Game_Over.fxml"));
                 try {
@@ -140,11 +143,13 @@ public class Regenerate_Game implements Initializable {
 
         boss=new Boss(550, -240);
 
+        weapon=new Weapon(player.getWeapon().getX(),player.getWeapon().getY());
+        weapon.gotweapon(player.getWeapon().getNumber());
+
         chests=new ArrayList<>();
         random=new Random();
         islands=new ArrayList<>();
         gameObjects=new ArrayList<>();
-//        add_hero();
         add_islands();
         add_chests();
         add_game_objects();
@@ -178,6 +183,7 @@ public class Regenerate_Game implements Initializable {
                 score.setText(Integer.toString(player.getCurrentscore()));
                 coin.setText(Integer.toString(player.getCurrentcoins()));
                 hero.window_sliding_forward();
+                weapon.window_sliding_forward();
                 for(int i=0;i<gameObjects.size();i++)
                 {
                     gameObjects.get(i).objects_move_Back();
@@ -270,6 +276,7 @@ public class Regenerate_Game implements Initializable {
                         death.stop();
                         collision_objects.stop();
 
+                        pane.getChildren().add(weapon.imageView);
                         pane.getChildren().remove(gameoverpane);
                         player.setCurrentcoins(player.getCurrentcoins()-3);
                         coin.setText(Integer.toString(player.getCurrentcoins()));
@@ -365,18 +372,18 @@ public class Regenerate_Game implements Initializable {
         s=s.concat(".txt");
         return s;
     }
-    public void SerializePlayer(String fileName) throws IOException {
-        ObjectOutputStream out = null;
-        try {
-            player.add_objects_to_player(gameObjects,hero,islands,chests);
-            out = new ObjectOutputStream(new FileOutputStream(fileName));
-            out.writeObject(player);
-
-        }finally {
-            assert out != null;
-            out.close();
-        }
-    }
+//    public void SerializePlayer(String fileName) throws IOException {
+//        ObjectOutputStream out = null;
+//        try {
+//            player.add_objects_to_player(gameObjects,hero,islands,chests,);
+//            out = new ObjectOutputStream(new FileOutputStream(fileName));
+//            out.writeObject(player);
+//
+//        }finally {
+//            assert out != null;
+//            out.close();
+//        }
+//    }
     Runnable hasfallen = new Runnable() {
         @Override
         public void run() {
@@ -405,6 +412,9 @@ public class Regenerate_Game implements Initializable {
                 if(chests.get(i).getNumber()==1) {
                     player.setCurrentcoins(10);
                     coin.setText(Integer.toString(player.getCurrentcoins()));
+                }
+                else{
+                    weapon.gotweapon(1);
                 }
             }
         }
@@ -447,8 +457,11 @@ public class Regenerate_Game implements Initializable {
             else if(gameObjects.get(i) instanceof Green_Orchs)
             {
                 if(hero.imageView.getBoundsInParent().intersects(gameObjects.get(i).getImageView().getBoundsInParent()) &&  gameObjects.get(i).collided== false) {
-
-                    if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
+                    if(weapon.getNumber()!=2){
+                        weapon.kill();
+                        ((Green_Orchs) gameObjects.get(i)).collision();
+                    }
+                    else if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
                         hero.setDeath(1);
                     } else {
@@ -461,7 +474,11 @@ public class Regenerate_Game implements Initializable {
             {
                 if(hero.imageView.getBoundsInParent().intersects(gameObjects.get(i).getImageView().getBoundsInParent()) &&  gameObjects.get(i).collided== false) {
 
-                    if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
+                    if(weapon.getNumber()!=3){
+                        weapon.kill();
+                        ((Red_Orchs) gameObjects.get(i)).collision();
+                    }
+                    else if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
                         hero.setDeath(1);
                     } else {
@@ -516,13 +533,22 @@ public class Regenerate_Game implements Initializable {
         hero.move_up_hero();
         hero.set_exact_y();
         executorService22.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
+        pane.getChildren().add(weapon.imageView);
+        weapon.move_up_hero();
+        weapon.set_exact_y();
     }
     public void add_islands()
     {
         for(int i=0;i<player.getIslands().size();i++)
         {
+            if(i>=29){
+                Island island=new Island(player.getIslands().get(i).getX(),player.getIslands().get(i).getY(),1);
+                islands.add(island);
+            }
+            else{
             Island island=new Island(player.getIslands().get(i).getX(),player.getIslands().get(i).getY(),0);
             islands.add(island);
+            }
         }
         for(int i=0;i<islands.size();i++)
         {
@@ -600,7 +626,7 @@ public class Regenerate_Game implements Initializable {
                 System.out.println(boss.imageView.getY());
                 System.out.println(hero.getY()-20);
                 hero.stop_up_transitions();
-//                hero.death();
+                hero.setDeath(1);
             }
             else
             {

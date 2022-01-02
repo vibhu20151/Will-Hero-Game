@@ -93,11 +93,7 @@ public class Hero extends Game_Objects implements Serializable{
         rotate.setAutoReverse(false);
         rotate.setNode(imageView);
         rotate.play();
-        translateTransition.setToY(400);
-        translateTransition.setDuration(Duration.millis(200));
-        translateTransition.setNode(imageView);
-        translateTransition.setCycleCount(1);
-        translateTransition.play();
+
         pane.setOnMouseClicked(null);
 
     }

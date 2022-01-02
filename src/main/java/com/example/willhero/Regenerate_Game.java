@@ -3,6 +3,8 @@ package com.example.willhero;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -85,11 +87,55 @@ public class Regenerate_Game implements Initializable {
             collision_chest_check();
         }
     };
+    private AnimationTimer death=new AnimationTimer() {
+        @Override
+        public void handle(long timestamp) {
+            if(hero.getDeath()==1)
+            {
+                hero.death(pane);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Game_Over.fxml"));
+                try {
+                    gameoverpane=(AnchorPane) loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                pane.getChildren().add(gameoverpane);
+                gameoverpane.getChildren().get(5).setOnMouseClicked(playagain);                ;  //lags a littl.....!!
+
+                gameoverpane.getChildren().get(4).setOnMouseClicked(playwithcoins);                ;  //lags a littl.....!!
+
+                gameoverpane.getChildren().get(6).setOnMouseClicked(exit);                ;  //lags a littl.....!!
+                gameoverpane.setLayoutX(200);
+                gameoverpane.setLayoutY(200);
+                scoreafterdeath=new Label(Integer.toString(player.getCurrentscore()));
+                coinafterdeath=new Label(Integer.toString(player.getCurrentcoins()));
+                scoreafterdeath.setLayoutX(325);
+                scoreafterdeath.setFont(font);
+                scoreafterdeath.setLayoutY(160);
+                coinafterdeath.setLayoutY(200);
+                coinafterdeath.setFont(font);
+                coinafterdeath.setLayoutX(325);
+                gameoverpane.getChildren().add(scoreafterdeath);
+                gameoverpane.getChildren().add(coinafterdeath);
+                death.stop();
+
+                TranslateTransition t=new TranslateTransition();
+                t.setToY(800);
+                t.setDuration(Duration.millis(400));
+                t.setNode(hero.imageView);
+                t.setCycleCount(1);
+                t.play();
+                pause.setOnMouseClicked(null);
+            }
+        }
+    };
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         score=new Label(Integer.toString(player.getCurrentscore()));
         coin=new Label(Integer.toString(player.getCurrentcoins()));
         setPlayer(GameController.playerlaoding);
+
+        boss=new Boss(550, -240);
 
         chests=new ArrayList<>();
         random=new Random();
@@ -102,6 +148,26 @@ public class Regenerate_Game implements Initializable {
         boss=new Boss(550, -240);
         score.setText(Integer.toString(player.getCurrentscore()));
         coin.setText(Integer.toString(player.getCurrentcoins()));
+        pauseitnow=new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                FXMLLoader  loader = new FXMLLoader(getClass().getResource("PauseMenu.fxml"));
+                try {
+                    panel=(AnchorPane) loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                pane.getChildren().add(panel);
+                panel.getChildren().get(1).setOnMouseClicked(resumeGame);
+                panel.getChildren().get(2).setOnMouseClicked(saveGame);
+                panel.getChildren().get(3).setOnMouseClicked(exitgame);
+
+
+                pane.setOnMouseClicked(null);
+
+            }
+        };
+
         screenclicked=new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -125,6 +191,16 @@ public class Regenerate_Game implements Initializable {
                 {
                     collision_objects.stop();
                     executorService.shutdownNow();
+                }
+                if(player.getCurrentscore()==101)
+                {
+                    add_boss();
+                    boss.translation_of_boss();
+                    boss_collision.start();
+                }
+                if(player.getCurrentscore()>101)
+                {
+                    boss.objects_move_Back();
                 }
             }
         };
@@ -152,6 +228,85 @@ public class Regenerate_Game implements Initializable {
                 GameOpen.mystage.show();
             }
         };
+        exit=new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Platform.exit();
+                System.exit(0);
+            }
+        };
+        playwithcoins=new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(player.getGames_played()==0)
+                {
+                    if(player.getCurrentcoins() >= 3)
+                    {
+                        pane.getChildren().remove(gameoverpane);
+                        player.setCurrentcoins(player.getCurrentcoins()-3);
+                        coin.setText(Integer.toString(player.getCurrentcoins()));
+                        pause.setOnMouseClicked(pauseitnow);
+                        player.setGames_played(1);
+
+                        pane.getChildren().remove(hero);
+
+                        hero=new Hero(50,400);
+                        hero.move_up_hero();
+
+
+                        pane.getChildren().add(hero.imageView);
+                        for(int i=0;i< islands.size();i++)
+                        {
+                            islands.get(i).window_sliding();
+                        }
+                        for(int i=0;i< chests.size();i++)
+                        {
+                            chests.get(i).window_sliding();
+                        }
+                        for (int i=0;i< gameObjects.size();i++)
+                        {
+                            gameObjects.get(i).objects_move_Back();
+                        }
+                        pane.setOnMouseClicked(screenclicked);
+                        ScheduledExecutorService executorService1 = Executors.newScheduledThreadPool(1);
+                        executorService1.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
+                        death.start();
+                    }
+                    else
+                    {
+                        Label message=new Label("Sorry You are not eligible to Revive..!");
+                        gameoverpane.getChildren().add(message);
+                        message.setFont(font);
+                        message.setLayoutX(25);
+                        message.setLayoutY(335);
+                    }
+                }
+                else
+                {
+                    Label message=new Label("Sorry You are not eligible to Revive..!");
+                    gameoverpane.getChildren().add(message);
+                    message.setFont(font);
+                    message.setLayoutX(25);
+                    message.setLayoutY(335);
+                }
+            }
+        };
+
+        playagain=new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                FXMLLoader fxmlLoader1=new FXMLLoader(GameOpen.class.getResource("Game.fxml"));
+                Scene scene1= null;
+                try {
+                    scene1 = new Scene(fxmlLoader1.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                GameOpen.mystage.setScene(scene1);
+                GameOpen.mystage.show();
+            }
+        };
+
         pane.setOnMouseClicked(screenclicked);
         collision_objects.start();
         add_hero();
@@ -162,7 +317,7 @@ public class Regenerate_Game implements Initializable {
         coin.setFont(font);
         pane.getChildren().add(score);
         pane.getChildren().add(coin);
-
+        death.start();
         saveGame=new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -215,7 +370,7 @@ public class Regenerate_Game implements Initializable {
         public void run() {
             if (!check_hero_x()) {
                 hero.stop_up_transitions();
-                hero.death(pane);
+                hero.setDeath(1);
                 executorService.shutdownNow();
             }
         }
@@ -263,6 +418,18 @@ public class Regenerate_Game implements Initializable {
                 {
 
                     ((TNT) gameObjects.get(i)).collision();
+                    int k =i;
+
+                    Timeline yt=new Timeline(new KeyFrame(Duration.millis(1),e->
+                    {
+                        if(gameObjects.get(k).getX()<110 & gameObjects.get(k).getX()>-50){
+                            hero.stop_up_transitions();
+                            hero.setDeath(1);
+                        }
+                    }));
+                    yt.setCycleCount(1);
+                    yt.setDelay(Duration.seconds(2));
+                    yt.play();
                 }
             }
             else if(gameObjects.get(i) instanceof Green_Orchs)
@@ -271,7 +438,7 @@ public class Regenerate_Game implements Initializable {
 
                     if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
-                        hero.death(pane);
+                        hero.setDeath(1);
                     } else {
                         ((Green_Orchs) gameObjects.get(i)).collision();
                     }
@@ -284,8 +451,7 @@ public class Regenerate_Game implements Initializable {
 
                     if (gameObjects.get(i).getImageView().getY() <= hero.getY()-10) {
                         hero.stop_up_transitions();
-                        hero.death(pane);
-
+                        hero.setDeath(1);
                     } else {
                         ((Red_Orchs) gameObjects.get(i)).collision();
                     }
@@ -306,7 +472,6 @@ public class Regenerate_Game implements Initializable {
             }
         }
     }
-    private AnchorPane gameoverpane;
 
     public void loadthegame(String finalloader_file) throws IOException, ClassNotFoundException {
         deserialize(finalloader_file);
@@ -321,8 +486,6 @@ public class Regenerate_Game implements Initializable {
         finally {
             in.close();
         }
-
-
         FXMLLoader fxmlLoader1=new FXMLLoader(GameOpen.class.getResource("Game_Scene_Blank.fxml"));
         Scene scene1= null;
         try {
@@ -332,8 +495,6 @@ public class Regenerate_Game implements Initializable {
         }
         GameOpen.mystage.setScene(scene1);
         Regenerate_Game a=fxmlLoader1.getController();
-//        a.setPlayer(playerlaoding);
-//        fxmlLoader1.setController(a);
 
     }
 
@@ -380,9 +541,10 @@ public class Regenerate_Game implements Initializable {
                 Coin coin=new Coin(player.getGameObjects().get(i).getX(),player.getGameObjects().get(i).getY());
                 gameObjects.add(coin);
             }
+
             else{
 
-            }
+        }
         }
         for (int i =0;i<gameObjects.size();i++)
         {
@@ -401,4 +563,44 @@ public class Regenerate_Game implements Initializable {
         }
     }
 
+
+    Label scoreafterdeath;
+    Label coinafterdeath;
+    private AnchorPane gameoverpane;
+
+    private EventHandler<MouseEvent>playagain;
+    private EventHandler<MouseEvent>playwithcoins;
+    private EventHandler<MouseEvent>pauseitnow;
+    private EventHandler<MouseEvent> exit;
+
+    private AnimationTimer boss_collision=new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            boss_collision();
+        }
+    };
+    public void boss_collision()
+    {
+        if(hero.imageView.getBoundsInParent().intersects(boss.imageView.getBoundsInParent()) )
+        {
+            if(boss.imageView.getY()<=hero.getY()-240)
+            {
+                System.out.println(boss.imageView.getY());
+                System.out.println(hero.getY()-20);
+                hero.stop_up_transitions();
+//                hero.death();
+            }
+            else
+            {
+                if(boss.getNo_of_collision()<20)
+                {
+                    boss.simple_collision();
+                }
+                else
+                {
+                    boss.death();
+                }
+            }
+        }
+    }
 }

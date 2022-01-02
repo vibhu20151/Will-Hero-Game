@@ -1,9 +1,6 @@
 package com.example.willhero;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -44,6 +41,13 @@ public class GameController implements Initializable {
             gameObjects=player.getGameObjects();
     }
 
+    private AnimationTimer boss_collision=new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            boss_collision();
+        }
+    };
+
     Label score;
     Font font = Font.font("Brush Script MT", FontWeight.BOLD, FontPosture.REGULAR, 35);
     Label coin;
@@ -74,6 +78,7 @@ public class GameController implements Initializable {
     private EventHandler<MouseEvent> exit;
     private EventHandler<MouseEvent>playagain;
     private EventHandler<MouseEvent>playwithcoins;
+    private EventHandler<MouseEvent>pauseitnow;
 
 
     @FXML
@@ -116,8 +121,6 @@ public class GameController implements Initializable {
                 gameoverpane.getChildren().get(4).setOnMouseClicked(playwithcoins);                ;  //lags a littl.....!!
 
                 gameoverpane.getChildren().get(6).setOnMouseClicked(exit);                ;  //lags a littl.....!!
-
-
                 gameoverpane.setLayoutX(200);
                 gameoverpane.setLayoutY(200);
                 scoreafterdeath=new Label(Integer.toString(player.getCurrentscore()));
@@ -130,6 +133,15 @@ public class GameController implements Initializable {
                 coinafterdeath.setLayoutX(325);
                 gameoverpane.getChildren().add(scoreafterdeath);
                 gameoverpane.getChildren().add(coinafterdeath);
+                death.stop();
+
+                TranslateTransition t=new TranslateTransition();
+                t.setToY(800);
+                t.setDuration(Duration.millis(400));
+                t.setNode(hero.imageView);
+                t.setCycleCount(1);
+                t.play();
+                pause.setOnMouseClicked(null);
             }
         }
     };
@@ -150,6 +162,25 @@ public class GameController implements Initializable {
 
         add_islands();
         add_game_objects();
+        pauseitnow=new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                FXMLLoader  loader = new FXMLLoader(getClass().getResource("PauseMenu.fxml"));
+                try {
+                    panel=(AnchorPane) loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                pane.getChildren().add(panel);
+                panel.getChildren().get(1).setOnMouseClicked(resumeGame);
+                panel.getChildren().get(2).setOnMouseClicked(saveGame);
+                panel.getChildren().get(3).setOnMouseClicked(exitgame);
+
+
+                pane.setOnMouseClicked(null);
+
+            }
+        };
         screenclicked=new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -173,6 +204,16 @@ public class GameController implements Initializable {
                 {
                     collision_objects.stop();
                     executorService.shutdownNow();
+                }
+                if(player.getCurrentscore()==101)
+                {
+                    add_boss();
+                    boss.translation_of_boss();
+                    boss_collision.start();
+                }
+                if(player.getCurrentscore()>101)
+                {
+                    boss.objects_move_Back();
                 }
             }
         };
@@ -212,12 +253,54 @@ public class GameController implements Initializable {
             public void handle(MouseEvent mouseEvent) {
                 if(player.getGames_played()==0)
                 {
-                    if(player.getCurrentcoins() > 3)
+                    if(player.getCurrentcoins() >= 3)
                     {
                         pane.getChildren().remove(gameoverpane);
                         player.setCurrentcoins(player.getCurrentcoins()-3);
+                        coin.setText(Integer.toString(player.getCurrentcoins()));
+                        pause.setOnMouseClicked(pauseitnow);
                         player.setGames_played(1);
+
+                        pane.getChildren().remove(hero);
+
+                        hero=new Hero(50,400);
+                        hero.move_up_hero();
+
+
+                        pane.getChildren().add(hero.imageView);
+                        for(int i=0;i< islands.size();i++)
+                        {
+                            islands.get(i).window_sliding();
+                        }
+                        for(int i=0;i< chests.size();i++)
+                        {
+                            chests.get(i).window_sliding();
+                        }
+                        for (int i=0;i< gameObjects.size();i++)
+                        {
+                            gameObjects.get(i).objects_move_Back();
+                        }
+                        pane.setOnMouseClicked(screenclicked);
+                        ScheduledExecutorService executorService1 = Executors.newScheduledThreadPool(1);
+                        executorService1.scheduleAtFixedRate(hasfallen, 0, 2, TimeUnit.SECONDS);
+                        death.start();
                     }
+                    else
+                    {
+                        Label message=new Label("Sorry You are not eligible to Revive..!");
+                        gameoverpane.getChildren().add(message);
+                        message.setFont(font);
+                        message.setLayoutX(25);
+                        message.setLayoutY(335);
+                    }
+                }
+                else
+                {
+                    Label message=new Label("Sorry You are not eligible to Revive..!");
+                    gameoverpane.getChildren().add(message);
+                    message.setFont(font);
+                    message.setLayoutX(25);
+                    message.setLayoutY(335);
                 }
             }
         };
@@ -493,6 +576,18 @@ public class GameController implements Initializable {
                 {
 
                     ((TNT) gameObjects.get(i)).collision();
+                    int k =i;
+
+                    Timeline yt=new Timeline(new KeyFrame(Duration.millis(1),e->
+                    {
+                        if(gameObjects.get(k).getX()<110 & gameObjects.get(k).getX()>-50){
+                            hero.stop_up_transitions();
+                            hero.setDeath(1);
+                        }
+                    }));
+                    yt.setCycleCount(1);
+                    yt.setDelay(Duration.seconds(2));
+                    yt.play();
                 }
             }
             else if(gameObjects.get(i) instanceof Green_Orchs)
@@ -531,9 +626,33 @@ public class GameController implements Initializable {
                 }
             else
             {
+            }
+            }
+    }
 
+    public void boss_collision()
+    {
+        if(hero.imageView.getBoundsInParent().intersects(boss.imageView.getBoundsInParent()) )
+        {
+            if(boss.imageView.getY()<=hero.getY()-240)
+            {
+                System.out.println(boss.imageView.getY());
+                System.out.println(hero.getY()-20);
+                hero.stop_up_transitions();
+//                hero.death();
             }
+            else
+            {
+                if(boss.getNo_of_collision()<20)
+                {
+                    boss.simple_collision();
+                }
+                else
+                {
+                    boss.death();
+                }
             }
+        }
     }
 
     public void loadthegame(String finalloader_file) throws IOException, ClassNotFoundException {
@@ -566,6 +685,7 @@ public class GameController implements Initializable {
 //        fxmlLoader1.setController(a);
 
     }
+
 
 }
 

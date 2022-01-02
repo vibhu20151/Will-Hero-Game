@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="387.0" prefWidth="680.0" style="-fx-background-color: #47debd;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -43,10 +42,5 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Text layoutX="299.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please have patience .. It loads..">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Text>
    </children>
 </AnchorPane>

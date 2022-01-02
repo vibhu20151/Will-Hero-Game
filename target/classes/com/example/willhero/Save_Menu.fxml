@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="352.0" prefWidth="375.0" style="-fx-background-color: #bdd341;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.willhero.GameController">
+   <children>
+      <TextField fx:id="namefield" layoutX="173.0" layoutY="130.0" />
+      <Label layoutX="65.0" layoutY="134.0" text="Enter Name :" />
+      <Button fx:id="finalsave" layoutX="56.0" layoutY="260.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="129.0" text="SAVE and EXIT">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="returntopause" layoutX="219.0" layoutY="260.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" text="Return ">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

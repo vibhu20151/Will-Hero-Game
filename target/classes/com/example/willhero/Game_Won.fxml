@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="337.0" prefWidth="680.0" style="-fx-background-color: #47debd;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="275.0" layoutY="24.0" prefHeight="75.0" prefWidth="165.0" text="WILL HERO">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Label>
+      <Label layoutX="194.0" layoutY="89.0" prefHeight="94.0" prefWidth="466.0" text="Mojo!! You Won...!!">
+         <font>
+            <Font size="39.0" />
+         </font>
+      </Label>
+      <Button fx:id="resume" layoutX="142.0" layoutY="247.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="163.0" text="Play Again">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="resume1" layoutX="451.0" layoutY="247.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="163.0" text="Exit Game">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

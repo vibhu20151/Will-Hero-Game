@@ -6,8 +6,8 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 
 
 # Meet the team
-* Vaibhav Rajpal @ creator-26
-* Vibhu Jain @ vibhu20151
+* Vaibhav Rajpal @creator-26
+* Vibhu Jain @vibhu20151
 
 # Installation Guide
 * We need Java 17 JDK to run this application. So get ready with that.

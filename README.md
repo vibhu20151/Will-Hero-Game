@@ -13,3 +13,10 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 * We need Java 17 JDK to run this application. So get ready with that.
 * Download the Game by downloading from the latest release. Extract it to suitable location.
 * Run the entire project in a Java Environment and you are good to go !!!...
+# Implementation
+* Used concepts of Java OOPS to implement in a proper structred manner. 
+* Used JavaFx library for moving and Animation Stuff.
+* It also utilizes threads and Executor Services for parallel execution of checking whether hero dies or not.
+* Additionlly, serialization has been implemented for multiple save and load to store the progress.
+# In Game Assests
+* 

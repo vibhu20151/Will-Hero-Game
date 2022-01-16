@@ -6,7 +6,7 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 
 
 # Meet the team
-* Vaibhav Rajpal @creator-26
+* Vaibhav Rajpal @**creator-26**
 * Vibhu Jain @vibhu20151
 
 # Installation Guide

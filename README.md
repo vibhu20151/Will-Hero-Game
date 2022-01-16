@@ -1,5 +1,7 @@
 # Will-Hero-Game
-CSE201 - Advanced Programming - Monsoon 2021 - Group Project
+Made as a part of project in Advanced Programming course at IIIT-Delhi.
+
+Uses Java and JavaFx.
 
 # Meet the team
 * Vaibhav Rajpal @ creator-26

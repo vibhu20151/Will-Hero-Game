@@ -19,4 +19,9 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 * It also utilizes threads and Executor Services for parallel execution of checking whether hero dies or not.
 * Additionlly, serialization has been implemented for multiple save and load to store the progress.
 # In Game Assests
-* 
+* Orchs[Enemy]: Red or Green types
+* TNT  , Coins
+* Chest : Weapon or Coin inside it.
+* Boss[Big Enemy]: Takes three or more collision to die.
+* Save Game and Restart Game Options: User can save multiple game states,and relod them.
+* Background Images there[ For better UI ]

@@ -6,8 +6,8 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 
 
 # Meet the team
-* Vaibhav Rajpal @**creator-26**
-* Vibhu Jain @vibhu20151
+* **Vaibhav Rajpal @creator-26**
+* **Vibhu Jain @vibhu20151**
 
 # Installation Guide
 * We need Java 17 JDK to run this application. So get ready with that.
@@ -25,3 +25,4 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 * Boss[Big Enemy]: Takes three or more collision to die.
 * Save Game and Restart Game Options: User can save multiple game states,and relod them.
 * Background Images there[ For better UI ]
+# In Game ScreenShoots

@@ -25,4 +25,4 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 * Boss[Big Enemy]: Takes three or more collision to die.
 * Save Game and Restart Game Options: User can save multiple game states,and relod them.
 * Background Images there[ For better UI ]
-# In Game ScreenShoots
+

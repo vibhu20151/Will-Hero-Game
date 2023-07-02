@@ -29,5 +29,7 @@ Clone of a game Will-Hero developed by ZPLAY GAMES.
 # Some InGame Screenshots![1](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/81a148cc-d087-430e-8251-8af2966b69f8)
 ![2](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/c4d9dd8e-7ac1-44cd-b509-35946ea6f0f5)
 ![3](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/ea086105-850e-489d-b595-1ce8a31c9f16)![4](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/b423ac12-11bb-4cbf-9315-23d58a576791)
-![1](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/b6228469-592d-426b-ae35-352f3e2a4a4b)
+![5](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/b4399365-15c6-47a9-94ff-4be1840de54f)
+![6](https://github.com/vibhu20151/Will-Hero-Game/assets/65280240/122e3114-e72d-46ca-aa56-e33a12809ec2)
+
 
